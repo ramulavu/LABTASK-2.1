@@ -1,0 +1,40 @@
+def encrypt_file(input_file, output_file, key):
+    with open(input_file, 'rb') as f:
+        plaintext = f.read()
+    
+    # Ensure the plaintext length is a multiple of 8 (DES block size)
+    while len(plaintext) % 8 != 0:
+        plaintext += b'\0'  # Padding with null bytes
+
+    ciphertext = b''
+    for i in range(0, len(plaintext), 8):
+        ciphertext += des_encrypt_with_lib(plaintext[i:i+8], key)
+
+    with open(output_file, 'wb') as f:
+        f.write(ciphertext)
+
+def decrypt_file(input_file, output_file, key):
+    with open(input_file, 'rb') as f:
+        ciphertext = f.read()
+    
+    plaintext = b''
+    for i in range(0, len(ciphertext), 8):
+        plaintext += des_decrypt_with_lib(ciphertext[i:i+8], key)
+
+    # Remove padding
+    plaintext = plaintext.rstrip(b'\0')
+    
+    with open(output_file, 'wb') as f:
+        f.write(plaintext)
+
+# Example usage for file encryption and decryption
+key = b'8bytekey'
+input_file = 'plain.txt'  # Replace with your file path
+encrypted_file = 'encrypted.dat'
+decrypted_file = 'decrypted.txt'
+
+# Encrypt the file
+encrypt_file(input_file, encrypted_file, key)
+
+# Decrypt the file
+decrypt_file(encrypted_file, decrypted_file, key)
