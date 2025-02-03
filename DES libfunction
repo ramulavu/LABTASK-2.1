@@ -1,0 +1,23 @@
+from Crypto.Cipher import DES
+from Crypto.Random import get_random_bytes
+
+# Encryption
+def des_encrypt_with_lib(plaintext, key):
+    cipher = DES.new(key, DES.MODE_ECB)  # DES mode can be changed as needed
+    ciphertext = cipher.encrypt(plaintext)
+    return ciphertext
+
+# Decryption
+def des_decrypt_with_lib(ciphertext, key):
+    cipher = DES.new(key, DES.MODE_ECB)
+    decrypted = cipher.decrypt(ciphertext)
+    return decrypted
+
+# Example usage
+key = b'8bytekey'  # DES requires an 8-byte key
+plaintext = b'abcdefgh'  # 8 bytes of plaintext (64 bits)
+ciphertext = des_encrypt_with_lib(plaintext, key)
+decrypted_text = des_decrypt_with_lib(ciphertext, key)
+
+print(f"Ciphertext: {ciphertext}")
+print(f"Decrypted Text: {decrypted_text}")
